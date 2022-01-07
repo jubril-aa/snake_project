@@ -3,34 +3,56 @@ Snake game made with pygame
 """
 
 import pygame
+import random
 
-# constant color dark-green
+# constant color dark-green for the background
 """Color palette form: https://www.rapidtables.com/web/color/green-color.html"""
 GREEN = (0, 100, 0)
 
 
+class Food:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.x = random.randint(20, self.width - 20)
+        self.y = random.randint(20, self.height - 20)
+
+
 class App:
+    orange = (0xFF, 0x8C, 0x00)
+
     def __init__(self):
         self._game_active = True
         self.game_board = None
-        self.size = [640, 480]
+        self.width = 640
+        self.height = 480
+        self.size = [self.width, self.height]
         self.caption = None
+        self.clock = pygame.time.Clock()
+        self.food = Food(self.width, self.height)
 
     def on_init(self):
         """initialize pygame and all necessary settings"""
         pygame.init()
+
         # the display/screen has Surface methods
         self.game_board = pygame.display.set_mode(self.size)
-        # if no rect is specified, the color is applied to the whole screen
+        # if rect as argument is specified, the color is applied to the whole screen
         self.game_board.fill(GREEN)
         pygame.display.set_caption("Snake - eat em all")
         # displays the whole thing, with changes etc.
         pygame.display.update()
 
-        # self._game_active = True
+    def on_event(self, event):
+        """check if user hits the Quit-button"""
+        self.game_board = pygame.display.set_mode(self.size)
+        pygame.display.set_caption("Snake - eat em all")
+        self._game_active = True
+        self.clock.tick(25)
 
     # check if user hits the Quit-button
     def on_event(self, event):
+
         if event.type == pygame.QUIT:
             self._game_active = False
 
@@ -44,6 +66,13 @@ class App:
 
     def on_render(self):
         pass
+
+        # print out the screen graphic
+
+    def on_render(self, food):
+        # 20 20 is the size of the food
+        pygame.draw.rect(self.game_board, self.orange, pygame.Rect(self.food.x, self.food.y, 20, 20))
+        pygame.display.flip()
 
         # print out the screen graphic
 
@@ -62,7 +91,8 @@ class App:
 
             self.on_loop()
             self.on_render()
-        # quit the game
+            # quit the game
+            self.on_render(self.food)
         self.on_cleanup()
 
 
