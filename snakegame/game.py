@@ -3,7 +3,7 @@ Snake game made with pygame
 """
 
 import pygame
-import random
+from snakegame.food import Food
 from snakegame.serpent import Boa
 
 # GAME CONSTANTS
@@ -12,29 +12,31 @@ GREEN = (0, 100, 0)
 GAME_SPEED = 10
 
 
-class Food:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.x = random.randint(20, self.width - 20)
-        self.y = random.randint(20, self.height - 20)
-
-
 class App:
-    orange = (0xFF, 0x8C, 0x00)
 
     def __init__(self):
         self.game_active = True
         self.game_board = None
         self.width = 700
         self.height = 540
-        self.size = [self.width, self.height]
+        self.size = (self.width, self.height)
         self.clock = pygame.time.Clock()
-        self.food = Food(self.width, self.height)
+        # create food
+        self.food = Food(width=self.width, height=self.height, board=self.size)
         # create snake
         self.snake = Boa(self.size)
+        self.points = 0
 
-        # Test object
+    @property
+    def points(self):
+        """Return the points made during the game"""
+        return self._points
+
+    @points.setter
+    def points(self, points):
+        """Set the points"""
+        assert type(points) == int
+        self._points = points
 
     def on_init(self):
         """initialize pygame and all necessary settings"""
@@ -52,27 +54,17 @@ class App:
         if event.type == pygame.QUIT:
             self.game_active = False
 
-            # add events, like hitting buttons etc.
-
     def on_loop(self, event):
         """Runs everything when the game is active"""
-        # snake behaviour
         if event.type == pygame.KEYDOWN:
             if event.key in self.snake.dir:
                 self.snake.check_key_press(event.key)
 
-        # Compute changes in the game. movements of snake etc
-
-    def on_render(self, food):
-        # 10 10 is the size of the food
-        pygame.draw.rect(self.game_board, self.orange, pygame.Rect(self.food.x, self.food.y, 10, 10))
-        # pygame.display.update()
-
-        # print out the screen graphic
-
     def on_cleanup(self):
         """In order to properly quit the game"""
         # TODO: database stuff
+        # TODO: Stuffs before quiting
+        print(self.points)
         pygame.quit()
 
     def on_execute(self):
@@ -80,7 +72,6 @@ class App:
         This loop is responsible for tasks such as checking for events (such as keyboard events or collision),
         moving objects, updating the display and eventually ending the game.
         """
-
         while self.game_active:  # True
             self.on_init()
             # event.get() collect every event that occurs
@@ -89,20 +80,20 @@ class App:
                 self.register_quit(event)
                 self.on_loop(event)
 
-                # all things the game should register during the while loop is true
+            # all things the game should register during the while loop is true
             self.snake.movement()
-            self.on_render(self.food)
+            # needs a Rect argument
+            if self.snake.eat(self.food.rect_food):
+                self.points += 1
+                self.food.grow_new_food()
+                self.snake.grow_boa()
+
+            else:
+                self.food.grow_food()
+
             pygame.display.update()
             if self.snake.detect_wall():
                 self.game_active = False
 
-        # quit the game
         self.on_cleanup()
 
-
-#
-# if __name__ == "__main__":
-#     theApp = App()
-#     theApp.on_execute()
-
-# play_snake = App()

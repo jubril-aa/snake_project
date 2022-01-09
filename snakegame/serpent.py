@@ -8,6 +8,7 @@ class Boa(object):
     """The Boidae, commonly known as boas or boids, are a family of nonvenomous snakes primarily found in the Americas,
     as well as Africa, Europe, Asia, and some Pacific Islands. Boas include some of the world's largest snakes,
     with the green anaconda of South America being the heaviest and second-longest snake known."""
+
     def __init__(self, screen):
         self.size = (20, 20)  # width, height
         # head position
@@ -29,6 +30,7 @@ class Boa(object):
         self.heading = "LEFT"
         self.change_heading = self.heading
         self.move_per_part = 20
+        self.rect_boa = []
 
     def check_key_press(self, event):
         """Manage changes in direction when any key in dir is pressed"""
@@ -78,14 +80,28 @@ class Boa(object):
          Due to calculation/process order the serpent hits the wall starting from the upper edge [-10, 710, 550, -10]"""
         width = self.screen.get_width()
         height = self.screen.get_height()
-        if self.body_boa[0][0] <= -20 or self.body_boa[0][0] >= width+20:
+        if self.body_boa[0][0] < 0 or self.body_boa[0][0] > width:
             return True
-        if self.body_boa[0][1] <= -20 or self.body_boa[0][1] >= height+20:
+        if self.body_boa[0][1] < 0 or self.body_boa[0][1] > height:
             return True
 
+    def eat(self, food):
+        """Get long when consume food
+        object_food - coordinates for food. If self.body_boa[0] == food then get longer"""
+        head_boa = pygame.Rect(self.body_boa[0], self.size)
+        if pygame.Rect.colliderect(food, head_boa):
+            # call the function grow_boa
+            return True
+
+    def grow_boa(self):
+        last_part = self.body_boa[-1]
+        self.body_boa.append(list(last_part))
+
     def __str__(self):
+        """The string representation of Boa"""
         string_rep = f"Type: Boa\n" \
                      f"Start length: 60x20\n" \
                      f"Favor Food: Humans\n" \
-                     f"Living: Austria"
+                     f"Living: Austria\n" \
+                     f"Owners: Peter, Florian and Jubril"
         return string_rep
