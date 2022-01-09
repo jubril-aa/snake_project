@@ -3,6 +3,7 @@
 from snakegame import play_snake
 
 if __name__ == '__main__':
+    """Execute the whole game"""
     play_snake.on_execute()
 
 

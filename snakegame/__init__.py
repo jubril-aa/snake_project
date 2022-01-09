@@ -2,6 +2,7 @@
 
 
 from snakegame.game import App
-from snakegame import serpent
+# from snakegame import serpent
+# from food import Food
 
 play_snake = App()
