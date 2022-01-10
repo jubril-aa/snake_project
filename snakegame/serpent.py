@@ -10,6 +10,7 @@ class Boa(object):
     with the green anaconda of South America being the heaviest and second-longest snake known."""
 
     def __init__(self, screen):
+        self.head_boa = None
         self.size = (20, 20)  # width, height
         # head position
         self.x, self.y = (int(screen[0] / 2), int(screen[1] / 2))
@@ -73,6 +74,7 @@ class Boa(object):
         # display the list of coordinates
         for pos in self.body_boa:
             pygame.draw.rect(self.screen, self.color, pygame.Rect((pos[0], pos[1]), self.size))
+        self.head_boa = pygame.Rect(self.body_boa[0], self.size)
 
     def detect_wall(self):
         """Detect if the x or y value of the first part of the serpent hit the wall (boundaries of the screen)
@@ -88,14 +90,20 @@ class Boa(object):
     def eat(self, food):
         """Get long when consume food
         object_food - coordinates for food. If self.body_boa[0] == food then get longer"""
-        head_boa = pygame.Rect(self.body_boa[0], self.size)
-        if pygame.Rect.colliderect(food, head_boa):
+        if pygame.Rect.colliderect(food, self.head_boa):
             # call the function grow_boa
             return True
 
     def grow_boa(self):
+        """Let the serpent grow"""
         last_part = self.body_boa[-1]
         self.body_boa.append(list(last_part))
+
+    def bite_self(self):
+        """Check if the serpent bites itself"""
+        if self.body_boa[0] in self.body_boa[1:]:
+            print(self.body_boa[0], self.body_boa[1:])
+            return True
 
     def __str__(self):
         """The string representation of Boa"""

@@ -64,7 +64,9 @@ class App:
         """In order to properly quit the game"""
         # TODO: database stuff
         # TODO: Stuffs before quiting
+        print("game over")
         print(self.points)
+
         pygame.quit()
 
     def on_execute(self):
@@ -92,8 +94,7 @@ class App:
                 self.food.grow_food()
 
             pygame.display.update()
-            if self.snake.detect_wall():
+            if self.snake.detect_wall() or self.snake.bite_self():
                 self.game_active = False
 
         self.on_cleanup()
-
