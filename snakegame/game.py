@@ -6,11 +6,15 @@ import pygame
 from snakegame.food import Food
 from snakegame.serpent import Boa
 
+pygame.font.init()
+
 # GAME CONSTANTS
 """Color palette form: https://www.rapidtables.com/web/color/green-color.html"""
 GREEN = (0, 100, 0)
+WHITE = (255, 255, 255)
 GAME_SPEED = 10
 
+GAME_FONT = pygame.font.Font("freesansbold.ttf", 24)
 
 class App:
 
@@ -37,6 +41,12 @@ class App:
         """Set the points"""
         assert type(points) == int
         self._points = points
+
+    def show_points(self):
+        """Shows the current points on the top"""    
+        self.current_points = GAME_FONT.render("Score: %s" %self.points, True, WHITE, GREEN)
+        show_points = self.game_board.blit(self.current_points,(10, 10))
+        
 
     def on_init(self):
         """initialize pygame and all necessary settings"""
@@ -76,19 +86,22 @@ class App:
         """
         while self.game_active:  # True
             self.on_init()
+            self.show_points()
             # event.get() collect every event that occurs
             for event in pygame.event.get():
                 # check if the while loop should stop
                 self.register_quit(event)
                 self.on_loop(event)
+                
 
             # all things the game should register during the while loop is true
             self.snake.movement()
             # needs a Rect argument
             if self.snake.eat(self.food.rect_food):
-                self.points += 1
+                self.points += 10
                 self.food.grow_new_food()
                 self.snake.grow_boa()
+                
 
             else:
                 self.food.grow_food()
