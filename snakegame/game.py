@@ -3,6 +3,9 @@ Snake game made with pygame
 """
 
 import pygame
+import os
+import sys
+import re
 from snakegame.food import Food
 from snakegame.serpent import Boa
 
@@ -43,9 +46,26 @@ class App:
         self._points = points
 
     def show_points(self):
-        """Shows the current points on the top"""    
-        self.current_points = GAME_FONT.render("Score: %s" %self.points, True, WHITE, GREEN)
+        """Shows the current points on the top. Every eaten food adds 10 points to the score"""    
+        self.current_points = GAME_FONT.render("Score: %s / Highscore: %s" % (self.points, self.load_highscore()), True, WHITE, GREEN)
         show_points = self.game_board.blit(self.current_points,(10, 10))
+        
+    def load_highscore(self):
+
+        with open (os.path.join(sys.path[0], "highscore.txt")) as f:
+            self.data_with_header = f.readlines()
+            
+        self.data = self.data_with_header[1:]
+
+        self.only_scores = []
+        for line in self.data:
+            line = line.split(",")
+            no_whitespace = re.sub('\s+', ',' , line[1].strip())
+            self.only_scores.append(no_whitespace)
+
+        self.only_scores_int = max([int(num) for num in self.only_scores])
+
+        return self.only_scores_int
         
 
     def on_init(self):
@@ -74,6 +94,11 @@ class App:
         """In order to properly quit the game"""
         # TODO: database stuff
         # TODO: Stuffs before quiting
+
+        #1. read database/ text file
+        #2. find highest score
+        #3. display highest score
+
         print("game over")
         print(self.points)
 
@@ -87,6 +112,7 @@ class App:
         while self.game_active:  # True
             self.on_init()
             self.show_points()
+            self.load_highscore()
             # event.get() collect every event that occurs
             for event in pygame.event.get():
                 # check if the while loop should stop
