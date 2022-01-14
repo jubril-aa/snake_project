@@ -8,6 +8,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# remove later, after completion
 run_test
 
 # C extensions
