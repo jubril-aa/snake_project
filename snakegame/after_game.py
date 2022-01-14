@@ -1,10 +1,11 @@
 """
-model author: Jubril Ayomide Ajao
-Update the whole game screen to let user input their usernames """
+module author: Jubril Ayomide Ajao
+Update the whole game screen to let user
+input their usernames and displays the top ten"""
 
 import pygame
 import time
-
+from snakegame.scores_db import get_top, insert_score
 
 GREEN = (0, 100, 0)
 WHITE = (255, 255, 255)
@@ -12,18 +13,44 @@ WHITE = (255, 255, 255)
 
 class GameOver(object):
     """Game over class"""
-    def __init__(self, size):
+    def __init__(self, size, points):
         self.size = size
+        self.points = points
         self.text = "Write Username"
         self.to_continue = "Press Enter to continue"
+        pygame.init()
+        self.screen = pygame.display.set_mode(self.size)
         # initialize new screen
         self.over()
 
+    def display_ten(self):
+        """Displays top ten"""
+        username = self.text.strip()
+        insert_score(username, self.points)
+
+        pygame.display.set_caption("Top Ten")
+        top_font = pygame.font.SysFont("didot.ttc", 60)
+        top_text = top_font.render("TOP 10", True, WHITE)
+        top_rect = top_text.get_rect()
+        top_rect.center = (350, 60)
+        self.screen.fill(GREEN)
+        self.screen.blit(top_text, top_rect)
+
+        dis = 120  # starting for the distance in between the players
+        for num, value in enumerate(get_top(10), 1):
+            print(num, value["user"], value["points"])
+
+            player_font = pygame.font.SysFont("didot.ttc", 30)
+            player_text = player_font.render(f"{num}.  {value['user']}    {value['points']}", True, WHITE)
+            player_rect = player_text.get_rect()
+            # for the alignment -> left align
+            player_rect.topleft = (280, dis)
+            self.screen.blit(player_text, player_rect)
+            dis += 30
+        pygame.display.update()
+
     def over(self):
         """Displays after game actions for user input"""
-        pygame.init()
-        screen = pygame.display.set_mode(self.size)
-
         # Tell user what to do
         next_font = pygame.font.SysFont("didot.ttc", 55)
         next_text = next_font.render(self.to_continue, True, WHITE)
@@ -57,11 +84,11 @@ class GameOver(object):
                     rect.size = img.get_size()
                     cursor.topleft = rect.topright
 
-            screen.fill(GREEN)
-            screen.blit(next_text, rect_next)
-            screen.blit(img, rect)
+            self.screen.fill(GREEN)
+            self.screen.blit(next_text, rect_next)
+            self.screen.blit(img, rect)
             if time.time() % 1 > 0.5:
-                pygame.draw.rect(screen, WHITE, cursor)
+                pygame.draw.rect(self.screen, WHITE, cursor)
             pygame.display.update()
 
-        pygame.quit()
+        self.display_ten()

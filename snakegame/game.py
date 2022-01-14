@@ -1,11 +1,8 @@
-"""model author: Peter Pernhaupt, Florian Weiß, Jubril Ayomide Ajao
+"""module author: Peter Pernhaupt, Florian Weiß, Jubril Ayomide Ajao
 Snake game made with pygame
 """
 
 import pygame
-import os
-import sys
-import re
 from snakegame.food import Food
 from snakegame.serpent import Boa
 import time
@@ -23,7 +20,7 @@ GAME_FONT = pygame.font.Font("freesansbold.ttf", 24)
 
 
 class App:
-
+    """This class execute the whole game"""
     def __init__(self):
         self.game_active = True
         self.game_board = None
@@ -50,28 +47,12 @@ class App:
         assert type(points) == int
         self._points = points
 
-    # def show_points(self):
-    #     """Shows the current points on the top. Every eaten food adds 10 points to the score"""
-    #     self.current_points = GAME_FONT.render("Score: %s / Highscore: %s" % (self.points, self.load_highscore()), True,
-    #                                            WHITE, GREEN)
-    #     self.game_board.blit(self.current_points, (10, 10))
-
-    # def load_highscore(self):
-    #
-    #     with open(os.path.join(sys.path[0], "highscore.txt")) as f:
-    #         self.data_with_header = f.readlines()
-    #
-    #     self.data = self.data_with_header[1:]
-    #
-    #     self.only_scores = []
-    #     for line in self.data:
-    #         line = line.split(",")
-    #         no_whitespace = re.sub('\s+', ',', line[1].strip())
-    #         self.only_scores.append(no_whitespace)
-    #
-    #     self.only_scores_int = max([int(num) for num in self.only_scores])
-    #
-    #     return self.only_scores_int
+    def show_points(self):
+        """Shows the current points on the top. Every eaten food adds 10 points to the score"""
+        highest = sdb.get_top(1)[0]["points"]
+        current_points = GAME_FONT.render("Score: %s / Highscore: %s" % (self.points, highest), True,
+                                          WHITE, GREEN)
+        self.game_board.blit(current_points, (10, 10))
 
     def on_init(self):
         """initialize pygame and all necessary settings"""
@@ -90,17 +71,9 @@ class App:
             if event.key in self.snake.dir:
                 self.snake.check_key_press(event.key)
 
-    def on_cleanup(self):
-
-        """In order to properly quit the game"""
-        # TODO: database stuff
-        # TODO: Stuffs before quiting
-
-        # 1. read database/ text file
-        # 2. find highest score
-        # 3. display highest score
-
-        """In order to properly quit the game after game actions"""
+    def next_screen(self):
+        """In order to properly quit the game
+        In order to properly quit the game after game actions"""
 
         # Displays Game over at the center of the screen
         pygame.display.set_caption("Game over")
@@ -114,18 +87,10 @@ class App:
         # wait two seconds before user can enter their username
         time.sleep(2)
 
-        game_over = GameOver(self.size)
+        GameOver(self.size, self.points)
 
-        # TODO: save points and username into database
-        sdb.insert_score(game_over.text, self.points)
-
-
-        print("game over")
-        print(self.points)
-        print(game_over.text)
-
-        print(type(self.points))
-        print(type(game_over.text))
+        # displays top ten for given sec
+        time.sleep(10)
         pygame.quit()
 
     def on_execute(self):
@@ -135,8 +100,7 @@ class App:
         """
         while self.game_active:  # True
             self.on_init()
-            # self.show_points()
-            # self.load_highscore()
+            self.show_points()
             # event.get() collect every event that occurs
             for event in pygame.event.get():
                 # check if the while loop should stop
@@ -157,4 +121,4 @@ class App:
             if self.snake.detect_wall() or self.snake.bite_self():
                 self.game_active = False
 
-        self.on_cleanup()
+        self.next_screen()
