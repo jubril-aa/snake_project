@@ -1,4 +1,4 @@
-"""model author: Florian Weiß
+"""module author: Florian Weiß
 Food of the serpent
 """
 

@@ -1,5 +1,5 @@
 """
-model author: Jubril Ayomide Ajao
+module author: Jubril Ayomide Ajao
 This module manages the snake object"""
 import pygame
 
