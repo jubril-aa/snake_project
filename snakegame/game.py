@@ -10,6 +10,7 @@ from snakegame.food import Food
 from snakegame.serpent import Boa
 import time
 from snakegame.after_game import GameOver
+import snakegame.scores_db as sdb
 
 pygame.font.init()
 
@@ -116,10 +117,15 @@ class App:
         game_over = GameOver(self.size)
 
         # TODO: save points and username into database
+        sdb.insert_score(game_over.text, self.points)
+
 
         print("game over")
         print(self.points)
         print(game_over.text)
+
+        print(type(self.points))
+        print(type(game_over.text))
         pygame.quit()
 
     def on_execute(self):
