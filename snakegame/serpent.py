@@ -102,14 +102,13 @@ class Boa(object):
     def bite_self(self):
         """Check if the serpent bites itself"""
         if self.body_boa[0] in self.body_boa[1:]:
-            print(self.body_boa[0], self.body_boa[1:])
             return True
 
     def __str__(self):
         """The string representation of Boa"""
         string_rep = f"Type: Boa\n" \
                      f"Start length: 60x20\n" \
-                     f"Favor Food: Humans\n" \
+                     f"Favorite Food: Humans\n" \
                      f"Living: Austria\n" \
                      f"Owners: Peter, Florian and Jubril"
         return string_rep
