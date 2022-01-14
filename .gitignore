@@ -8,6 +8,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+snakegame/__pycache__/
+
 # remove later, after completion
 run_test
 
