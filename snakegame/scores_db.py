@@ -15,7 +15,7 @@ def dict_factory(cursor, row):
 def open_db():
     """Open the database
     Returns a connection object from sqlite3"""
-    con = sqlite3.connect("snakegame/snake_database.db")
+    con = sqlite3.connect("snakegame/snakegame.db")
     con.row_factory = dict_factory
     return con
 
@@ -29,7 +29,7 @@ def insert_score(user, score):
     if exist:
         # change the point
         if exist["points"] < score:
-            cur.execute("UPDATE board SET points=:points  WHERE user=:user", {"user": user, "points": score})
+            cur.execute("UPDATE board SET points=:points WHERE user=:user", {"user": user, "points": score})
     # else create new row
     else:
         cur.execute("INSERT INTO board (user, points) VALUES(?, ?)", (user, score))
@@ -49,5 +49,6 @@ def get_top(lim):
     cur = open_db().cursor()
     # name is a Row object
     top = cur.execute(f"SELECT user, points FROM board ORDER BY board.points DESC LIMIT {lim}").fetchall()
+
     open_db().close()
     return top
