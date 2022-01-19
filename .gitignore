@@ -7,7 +7,7 @@
 __pycache__/
 
 snakegame/__pycache__/
-*pyc
+*.pyc
 
 # remove later, after completion
 run_test

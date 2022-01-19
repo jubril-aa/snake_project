@@ -49,7 +49,12 @@ class App:
 
     def show_points(self):
         """Shows the current points on the top. Every eaten food adds 10 points to the score"""
-        highest = sdb.get_top(1)[0]["points"]
+        max_points = sdb.get_top(1)
+        if len(max_points) == 0:
+            highest = 0
+        else:
+            highest = sdb.get_top(1)[0]["points"]
+
         current_points = GAME_FONT.render("Score: %s / Highscore: %s" % (self.points, highest), True,
                                           WHITE, GREEN)
         self.game_board.blit(current_points, (10, 10))
