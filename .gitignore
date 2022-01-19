@@ -6,8 +6,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-#snakegame/__pycache__/
-# *pyc
+snakegame/__pycache__/
+*.pyc
 
 # remove later, after completion
 run_test

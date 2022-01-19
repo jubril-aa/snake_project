@@ -12,18 +12,24 @@ def dict_factory(cursor, row):
     return d
 
 
-def open_db():
-    """Open the database
-    Returns a connection object from sqlite3"""
-    con = sqlite3.connect("snakegame/snakegame.db")
-    con.row_factory = dict_factory
-    return con
+# def open_db():
+#     """Open the database
+#     Returns a connection object from sqlite3"""
+#     con = sqlite3.connect("snakegame/snakegame.db")
+#     con.row_factory = dict_factory
+#     return con
 
+
+con = sqlite3.connect("snakegame/snakegame.db")
+con.row_factory = dict_factory
 
 def insert_score(user, score):
     """Insert score and user into database"""
+    con = sqlite3.connect("snakegame/snakegame.db")
+    con.row_factory = dict_factory
+    cur = con.cursor()
 
-    cur = open_db().cursor()
+    # cur = open_db().cursor()
     # create query to check if user in db
     exist = cur.execute("SELECT * FROM board WHERE board.user=:name", {"name": user}).fetchone()
     if exist:
@@ -34,10 +40,11 @@ def insert_score(user, score):
     else:
         cur.execute("INSERT INTO board (user, points) VALUES(?, ?)", (user, score))
     # Save (commit) the changes
-    open_db().commit()
+    # open_db().commit()
+    con.commit()
     # We can also close the connection if we are done with it.
     # Just be sure any changes have been committed, or they will be lost.
-    open_db().close()
+    # open_db().close()
     return
 
 
@@ -46,9 +53,14 @@ def get_top(lim):
     lim - must be an integer"""
 
     assert type(lim) is int
-    cur = open_db().cursor()
+
+    con = sqlite3.connect("snakegame/snakegame.db")
+    con.row_factory = dict_factory
+    cur = con.cursor()
+
+    # cur = open_db().cursor()
     # name is a Row object
     top = cur.execute(f"SELECT user, points FROM board ORDER BY board.points DESC LIMIT {lim}").fetchall()
 
-    open_db().close()
+    # open_db().close()
     return top
