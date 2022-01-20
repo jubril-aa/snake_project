@@ -38,8 +38,6 @@ class GameOver(object):
 
         dis = 120  # starting for the distance in between the players
         for num, value in enumerate(get_top(10), 1):
-            print(num, value["user"], value["points"])
-
             player_font = pygame.font.SysFont("didot.ttc", 30)
             player_text = player_font.render(f"{num}.  {value['user']}    {value['points']}", True, WHITE)
             player_rect = player_text.get_rect()
