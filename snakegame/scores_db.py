@@ -20,16 +20,12 @@ def dict_factory(cursor, row):
 #     return con
 
 
-con = sqlite3.connect("snakegame/snakegame.db")
-con.row_factory = dict_factory
-
-
 def insert_score(user, score):
     """Insert score and user into database"""
+
     con = sqlite3.connect("snakegame/snakegame.db")
     con.row_factory = dict_factory
     cur = con.cursor()
-
     # cur = open_db().cursor()
     # create query to check if user in db
     exist = cur.execute("SELECT * FROM board WHERE board.user=:name", {"name": user}).fetchone()
@@ -52,7 +48,12 @@ def insert_score(user, score):
 
 def get_top(lim):
     """Get data out of the database but limited by LIMIT
-    lim - must be an integer"""
+    Argument:
+    lim - must be an integer
+
+    Returns:
+        A list of dictionaries with sort by the value descending
+    """
 
     assert type(lim) is int
 

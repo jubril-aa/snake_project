@@ -36,7 +36,7 @@ class GameOver(object):
         self.screen.fill(GREEN)
         self.screen.blit(top_text, top_rect)
 
-        dis = 120  # starting for the distance in between the players
+        dis = 120  # starting point for the distance in between the player ranks
         for num, value in enumerate(get_top(10), 1):
             player_font = pygame.font.SysFont("didot.ttc", 30)
             player_text = player_font.render(f"{num}.  {value['user']}    {value['points']}", True, WHITE)
@@ -85,6 +85,7 @@ class GameOver(object):
             self.screen.fill(GREEN)
             self.screen.blit(next_text, rect_next)
             self.screen.blit(img, rect)
+            # let the cursor blink
             if time.time() % 1 > 0.5:
                 pygame.draw.rect(self.screen, WHITE, cursor)
             pygame.display.update()
