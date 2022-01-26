@@ -100,4 +100,4 @@ class TestScoreDatabase(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
-# python test_game.py
+# python snakegame/test_game.py
