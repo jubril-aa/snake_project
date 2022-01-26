@@ -28,10 +28,9 @@ class Food:
 
     def grow_new_food(self):
         """Creates new random position for food"""
-        x = random.randint(20, self.width - 20)
-        y = random.randint(35, self.height - 20)
-        self.rect_food = pygame.Rect((x, y), self.size)
-
+        self.x = random.randint(20, self.width - 20)
+        self.y = random.randint(35, self.height - 20)
+        self.rect_food = pygame.Rect((self.x, self.y), self.size)
 
 
 
