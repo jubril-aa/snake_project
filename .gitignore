@@ -5,13 +5,10 @@
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
-*$py.class
 
-snakegame/__pycache__/
+../cmshw/snake_cms/snakegame/__pycache__/
+*.pyc
 
-# remove later, after completion
-run_test
 
 # C extensions
 *.so

@@ -1,4 +1,4 @@
-"""model author: Peter Pernhaupt, Florian Weiß, Jubril Ayomide Ajao
+"""module author: Peter Pernhaupt, Florian Weiß, Jubril Ayomide Ajao
 Snake game made with pygame
 """
 
@@ -7,6 +7,7 @@ from snakegame.food import Food
 from snakegame.serpent import Boa
 import time
 from snakegame.after_game import GameOver
+import snakegame.scores_db as sdb
 
 pygame.font.init()
 
@@ -19,7 +20,7 @@ GAME_FONT = pygame.font.Font("freesansbold.ttf", 24)
 
 
 class App:
-
+    """This class execute the whole game"""
     def __init__(self):
         self.game_active = True
         self.game_board = None
@@ -47,9 +48,16 @@ class App:
         self._points = points
 
     def show_points(self):
-        """Shows the current points on the top"""
-        self.current_points = GAME_FONT.render("Score: %s" % self.points, True, WHITE, GREEN)
-        self.game_board.blit(self.current_points, (10, 10))
+        """Shows the current points on the top. Every eaten food adds 10 points to the score"""
+        max_points = sdb.get_top(1)
+        if len(max_points) == 0:
+            highest = 0
+        else:
+            highest = sdb.get_top(1)[0]["points"]
+
+        current_points = GAME_FONT.render("Score: %s / Highscore: %s" % (self.points, highest), True,
+                                          WHITE, GREEN)
+        self.game_board.blit(current_points, (10, 10))
 
     def on_init(self):
         """initialize pygame and all necessary settings"""
@@ -68,8 +76,9 @@ class App:
             if event.key in self.snake.dir:
                 self.snake.check_key_press(event.key)
 
-    def on_cleanup(self):
-        """In order to properly quit the game after game actions"""
+    def next_screen(self):
+        """In order to properly quit the game
+        In order to properly quit the game after game actions"""
 
         # Displays Game over at the center of the screen
         pygame.display.set_caption("Game over")
@@ -83,13 +92,10 @@ class App:
         # wait two seconds before user can enter their username
         time.sleep(2)
 
-        game_over = GameOver(self.size)
+        GameOver(self.size, self.points)
 
-        # TODO: save points and username into database
-
-        print("game over")
-        print(self.points)
-        print(game_over.text)
+        # displays top ten for given sec
+        time.sleep(10)
         pygame.quit()
 
     def on_execute(self):
@@ -120,4 +126,4 @@ class App:
             if self.snake.detect_wall() or self.snake.bite_self():
                 self.game_active = False
 
-        self.on_cleanup()
+        self.next_screen()

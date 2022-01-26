@@ -1,4 +1,4 @@
-"""model author: Florian Weiß
+"""module author: Florian Weiß
 Food of the serpent
 """
 
@@ -16,7 +16,7 @@ class Food:
         self.board = pygame.display.set_mode(kwargs["board"])
         # food should stay in an acceptable distance from the wall
         self.x = random.randint(20, self.width - 20)
-        self.y = random.randint(20, self.height - 20)
+        self.y = random.randint(35, self.height - 20) 
         self.color = ORANGE
         self.size = (10, 10)
         self.rect_food = pygame.Rect((self.x, self.y), self.size)
@@ -28,10 +28,9 @@ class Food:
 
     def grow_new_food(self):
         """Creates new random position for food"""
-        x = random.randint(20, self.width - 20)
-        y = random.randint(20, self.height - 20)
-        self.rect_food = pygame.Rect((x, y), self.size)
-
+        self.x = random.randint(20, self.width - 20)
+        self.y = random.randint(35, self.height - 20)
+        self.rect_food = pygame.Rect((self.x, self.y), self.size)
 
 
 
