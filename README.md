@@ -56,7 +56,7 @@ game quits.
 * Windows
     - Go the directory of the game. Type `py main.py` to your command line
 * Mac
-  - Type in python3 main.py
+  - Type in `python3 main.py`
 
 * Alternative you can execute the game by exeuting main.py in your preferred IDLE
 
