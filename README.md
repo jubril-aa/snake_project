@@ -3,9 +3,9 @@ This repository contains the snake game. It's written in Python with pygame.
 Scores are saved into sqlite3. 
 
 ## Table of contents
-* [Game description](#Game description)
+* [Game description](#Game-description)
 * [Screenshots](#Screenshots)
-* [Tech Stack](#Tech Stack)
+* [Tech Stack](#Tech-Stack)
 * [Setup](#Setup)
 * [License](#License)
 
